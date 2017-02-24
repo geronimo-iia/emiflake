@@ -1,5 +1,4 @@
 var EmiFlake = require('./emiflake');
-
 var f = new EmiFlake(new Buffer("hej"),
                      /*machineNumberLength:*/24,
                      /*sequenceNumberLength:*/16,

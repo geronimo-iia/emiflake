@@ -2,16 +2,13 @@
 #define BUILDING_NODE_EXTENSION
 #endif
 
-#include "EmiFlake.h"
-
 #include <node.h>
+#include "EmiFlake.h"
 
 using namespace v8;
 
-void InitAll(Handle<Object> target) {
-    HandleScope scope;
-    
-    EmiFlake::Init(target);
+void InitAll(Handle<Object> exports) {
+    EmiFlake::Init(exports);
 }
 
 NODE_MODULE(emiflake, InitAll)

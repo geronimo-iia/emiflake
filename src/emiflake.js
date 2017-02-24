@@ -6,13 +6,11 @@ var EmiFlake = function(machineNumber,
                         timestampLength,
                         timeOffset) {
   if (!timeOffset) timeOffset = 0;
-
   this._handle = new EmiFlakeAddon.EmiFlake(machineNumber,
                                             machineNumberLength,
                                             sequenceNumberLength,
                                             timestampLength,
                                             timeOffset);
-  
   this.machineNumber = machineNumber;
   this.machineNumberLength = machineNumberLength;
   this.sequenceNumberLength = sequenceNumberLength;
@@ -21,28 +19,27 @@ var EmiFlake = function(machineNumber,
 };
 
 EmiFlake.prototype.generate = function(cb) {
-  var buf = new Buffer(this._handle.byteLength());
+  cb = cb || function(b) {};
+  const buf = new Buffer(this._handle.byteLength());
   buf.fill(0);
-  
-  var result = this._handle.generate(buf);
-  var obj = this;
-
+  const result = this._handle.generate(buf);
   if (0 == result) {
     // Success
     process.nextTick(function() {
-      cb(buf);
+        cb(buf);
     });
   }
   else if (1 == result) {
+    const self = this;
     // Sequence number overflow. Wait for 1 ms and try again
     setTimeout(function() {
-      obj.generate(cb);
+      self.generate(cb);
     }, 1);
   }
   else if (2 == result) {
     // The timer has moved backwards by more than 1 second
     process.nextTick(function() {
-      cb(null);
+        cb(null);
     });
   }
   else {
