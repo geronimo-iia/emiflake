@@ -5,6 +5,19 @@
 
 [![NPM](https://nodei.co/npm/emiflake.png?downloads=true)](https://npmjs.org/package/emiflake)
 
+
+I've forked this repository to learn about node-gyp.
+
+About performance (npm run bench):
+
+EmiFlake Generate Twitter Snowflake x 472,213 ops/sec ±7.86% (56 runs sampled)
+EmiFlake Generate Boundary Flake x 482,965 ops/sec ±4.54% (60 runs sampled)
+Flakless x 3,582,994 ops/sec ±1.68% (81 runs sampled)
+UUID x 187,441 ops/sec ±5.60% (72 runs sampled)
+
+If you don't need boundary flake (based on mac address), you should use [Flakless](https://github.com/asalani93/node-flakeless)
+
+
 `emiflake` is a node.js utility library for creating a service that generates unique IDs at scale. Think of it as containing the common logic of [Twitter Snowflake](https://github.com/twitter/snowflake) and [Boundary Flake](https://github.com/boundary/flake), sans network and machine ID generation stuff.
 
 `emiflake` is useful if you want something like Snowflake, but don't want to use Zookeeper to coordinate the machine ID allocation. Another situation where the library is useful is when you want something like [Boundary Flake](https://github.com/boundary/flake), but don't want to add a dependency to Erlang.
@@ -48,13 +61,13 @@ Install with `npm`:
 Generate an id:
 
     var emiFlake = require('emiflake');
-    
+
     var f = new emiFlake(new Buffer("mid"),
                          /*machineNumberLength:*/24,
                          /*sequenceNumberLength:*/16,
                          /*timestampLength:*/24,
                          /*timestampOffset:*/20000);
-    
+
     f.generate(console.log);
 
 ## API

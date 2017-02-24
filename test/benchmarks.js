@@ -6,16 +6,27 @@
     const EmiFlake = require('..');
 
     const boundary = new EmiFlake(new Buffer("001422012345"), 48, 16, 64, 0);
-    const twitter = new EmiFlake(new Buffer("mid"), 10, 12, 41, 365246060*1000);
+    const twitter = new EmiFlake(new Buffer("mid"), 10, 12, 41, 365246060 * 1000);
+
+    const Flakeless = require('flakeless').Flakeless;
+    const flakeless = new Flakeless({
+        epochStart: Date.now(),
+        outputType: 'base64',
+        workerID: 71
+    });
+
     suite
-        .add('Generate Twitter Snowflake', function () {
-          boundary.generate();
+        .add('Generate Twitter Snowflake', function() {
+            boundary.generate();
         })
-        .add('Generate Boundary Flake', function () {
-          twitter.generate();
+        .add('Generate Boundary Flake', function() {
+            twitter.generate();
         })
-        .add('UUID', function () {
-          new UUID();
+        .add('Flakless', function() {
+            flakeless.next();
+        })
+        .add('UUID', function() {
+            new UUID();
         })
         .on('cycle', function(event) {
             console.log(String(event.target));
